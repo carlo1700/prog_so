@@ -75,37 +75,6 @@ int bmap_getBit(BitMap *bitmap, unsigned int index)
 }
 
 /**
- * @brief Restituisce 1 se tutti i bit della bitmap sono a 0, 0 altrimenti.
- *
- * @param bitmap
- * @return int
- *
- */
-int bmap_isClear(BitMap *bitmap)
-{
-    assert(bitmap);
-    unsigned long *data = (unsigned long *)bitmap->data;
-    size_t realsize = (bitmap->size + 7) / 8;
-    size_t numLongs = realsize / sizeof(unsigned long);
-
-    for (size_t i = 0; i < numLongs; ++i)
-    {
-        if (data[i] != 0)
-            return 0;
-    }
-    size_t remainingBytes = realsize % sizeof(unsigned long);
-    unsigned char *remainingData = (unsigned char *)(data + numLongs);
-
-    for (size_t i = 0; i < remainingBytes; ++i)
-    {
-        if (remainingData[i] != 0)
-            return 0;
-    }
-
-    return 1;
-}
-
-/**
  * @brief Restituisce l'indice del primo bit a 0 nella bitmap.
  * 
  * @param bitmap 
@@ -114,7 +83,7 @@ int bmap_isClear(BitMap *bitmap)
 int bmap_getFirstIndex(BitMap *bitmap)
 {
     assert(bitmap);
-    for (int i = 0; i < (int)bitmap->size; ++i)
+    for (int i = 0; i < (int)bitmap->size * 8; ++i)
     {
         if (bmap_getBit(bitmap, i) == 0)
             return i;
@@ -132,9 +101,9 @@ void bmap_print(BitMap *bitmap)
 {
     if (!bitmap)
         return;
-    for (int i = 0; i < (int)bitmap->size; ++i)
+    for (int i = 0; i < (int)bitmap->size * 8; ++i)
     {
         printf("%d ", bmap_getBit(bitmap, i));
     }
-    printf("\n");
+    printf("\n\n");
 }

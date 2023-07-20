@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Ofast
+CFLAGS = -Wall -Wextra -g
 BUILD = build
 
 SRCS := $(wildcard source/*.c)

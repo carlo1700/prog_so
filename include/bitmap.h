@@ -13,7 +13,6 @@ void bmap_clear(BitMap *bitmap, unsigned int index);
 void bmap_toggle(BitMap *bitmap, unsigned int index);
 int bmap_getFirstIndex(BitMap *bitmap);
 int bmap_getBit(BitMap *bitmap, unsigned int index);
-int bmap_isClear(BitMap *bitmap);
 void bmap_print(BitMap *bitmap);
 
 #endif // __BITMAP_H__
