@@ -21,8 +21,8 @@
 
 
 // per ignorare i warning di compilazione 
-#pragma GCC diagnostic ignored "-Wunused-variable"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+//#pragma GCC diagnostic ignored "-Wunused-variable"
+//#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
 typedef enum seek
 {
