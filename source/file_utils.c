@@ -23,7 +23,7 @@ int filenameIsValid(const char *name)
     }
 
 	return 1;
-    
+
 }
 
 FCB *searchFile(Disk *disk, const char *path)
@@ -122,29 +122,23 @@ FileHandle *createFileHandle(FCB *fcb, ModeType mode)
 
 FileHandle *createFile(Disk *disk, const char *path, ModeType mode)
 {
-
     FCB *fcb;
-
-    char *filename = getFilename(path);
-
+    char *filename;
+    filename = getFilename(path);
     if ((fcb = searchFile(disk, path)))
         return createFileHandle(fcb, mode);
-
     fcb = (FCB *)getBlock(disk);
     if (!fcb)
     {
         perror("Not enough space");
         return NULL;
     }
-
     fcbInit(fcb, filename);
-    
     if (!dirAddFile(disk, fcb))
     {
         perror("File could not be added to directory");
         return NULL;
     }
-
     return createFileHandle(fcb, mode);
 }
 
@@ -154,27 +148,35 @@ int eraseFile(Disk *disk, const char *path)
     char *block;
     char *filename;
     int idx;
-
     filename = getFilename(path);
     if (!filename)
         return 0;
-
     if (!(fcb = searchFile(disk, filename)))
-    { 
+    {
         perror("File not found");
         return 0;
     }
-
     while ((idx = getFatIndex(disk, fcb->fatIndex))!= -1)
     {
         block = getBlockFromIndex(disk, idx);
         eraseBlock(disk, block);
         fcb->fatIndex = resetFatIndex(disk, fcb->fatIndex);
     }
-
     dirRemoveFIle(disk, fcb);
     eraseBlock(disk, (char *)fcb);
     return 1;
+}
+
+FileHandle *f_open(Disk *disk, const char *path, ModeType mode)
+{
+    FCB *fcb;
+
+    char *filename = getFilename(path);
+
+    if ((fcb = searchFile(disk, path)))
+        return createFileHandle(fcb, mode);
+    perror("File not found");
+    return 0;
 }
 
 int f_close(FileHandle *fileHandle)
@@ -185,7 +187,6 @@ int f_close(FileHandle *fileHandle)
 
 int f_write(Disk *disk, FileHandle *f, char *buffer, int size)
 {
-
     assert(disk);
     assert(f);
     assert(buffer);
@@ -239,7 +240,7 @@ int f_read(Disk *disk, FileHandle *f, char *buffer, int size)
     assert(f->permission == R || f->permission == RW);
 
     int i = -1;
-    int bytesRead;
+    int bytesRead = 0;
     int bytesLeft;
     int bytesToRead;
 
@@ -294,7 +295,7 @@ int f_seek(Disk *disk, FileHandle *f, unsigned int offset, FSeek seek)
         return f->offset;
     case F_SEEK_END:
         f->offset = f->fcb->fileSize;
-        while (i++ < (f->offset / BLOCK_SIZE) && 
+        while (i++ < (f->offset / BLOCK_SIZE) &&
             (temp = getFatIndex(disk, f->fcb->fatIndex)) != -1)
         {
             idx = temp;

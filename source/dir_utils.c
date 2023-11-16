@@ -98,10 +98,8 @@ void createDir(Disk *disk, const char *path)
 	DIR *new_dir;
 	char *path_copy;
 	char *dirname;
-
 	if (!pathIsValid(path))
 		return;
-
 	path_copy = strdup(path);
 	dirname = strtok(path_copy, "/");
 	while (dirname != NULL)

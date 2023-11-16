@@ -21,8 +21,8 @@
 
 
 // per ignorare i warning di compilazione 
-//#pragma GCC diagnostic ignored "-Wunused-variable"
-//#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
 typedef enum seek
 {
@@ -103,6 +103,7 @@ int updateFatIndex(Disk *disk, int idx, int newIdx);
 FileHandle *createFile(Disk *disk, const char *path, ModeType mode);
 FCB *searchFile(Disk *disk, const char *path);
 int eraseFile(Disk *disk, const char *path);
+FileHandle *f_open(Disk *disk, const char *path, ModeType mode);
 int f_close(FileHandle *fileHandle);
 int f_write(Disk *disk, FileHandle *f, char *buffer, int size);
 int f_read(Disk *disk, FileHandle *f, char *buffer, int size);
